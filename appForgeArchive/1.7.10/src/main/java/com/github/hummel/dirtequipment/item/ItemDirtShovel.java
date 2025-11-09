@@ -23,13 +23,7 @@ public class ItemDirtShovel extends ItemSpade {
   @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add("\u00A79+0 Attack Damage");
 
-// Remove trailing blank lines, if any
-    while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
-        tooltip.remove(tooltip.size() - 1);
-    }
-
-        tooltip.add("\u00A79+0 Attack Damage");  // §9 (\u00A79) for blue text
     }
 }
