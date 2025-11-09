@@ -16,12 +16,23 @@ public class ItemDirtShovel extends ItemSpade {
 	public ItemDirtShovel() {
 		super(Materials.DIRT_TOOL2);
 		setCreativeTab(CreativeTabs.tabTools);
+        	setUnlocalizedName("dirtShovel");
+        	setTextureName("dirtequipment:dirt_shovel");
 		}
 
   @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add("\u00A79+1 Attack Damage");  // §9 (\u00A79) for blue text
+
+// Remove trailing blank lines, if any
+    while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
+        tooltip.remove(tooltip.size() - 1);
+    }
+
+    // Add the same visual spacing vanilla uses
+    tooltip.add("");
+
+        tooltip.add("\u00A79+0 Attack Damage");  // §9 (\u00A79) for blue text
     }
 }
