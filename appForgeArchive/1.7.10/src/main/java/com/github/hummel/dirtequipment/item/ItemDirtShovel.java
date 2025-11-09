@@ -30,9 +30,6 @@ public class ItemDirtShovel extends ItemSpade {
         tooltip.remove(tooltip.size() - 1);
     }
 
-    // Add the same visual spacing vanilla uses
-    tooltip.add("");
-
         tooltip.add("\u00A79+0 Attack Damage");  // §9 (\u00A79) for blue text
     }
 }
