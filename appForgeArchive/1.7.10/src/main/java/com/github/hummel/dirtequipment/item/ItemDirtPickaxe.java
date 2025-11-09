@@ -13,26 +13,25 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemPickaxe;
 
 public class ItemDirtPickaxe extends ItemPickaxe {
-	public ItemDirtPickaxe() {
-		super(Materials.DIRT_TOOL);
-		setCreativeTab(CreativeTabs.tabTools);
-        	setUnlocalizedName("dirtPickaxe");
-        	setTextureName("dirtequipment:dirt_pickaxe");
-	}
 
+    public ItemDirtPickaxe() {
+        super(Materials.DIRT_TOOL);
+        setCreativeTab(CreativeTabs.tabTools);
+        setUnlocalizedName("dirtPickaxe");
+        setTextureName("dirtequipment:dirt_pickaxe");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         for (int i = tooltip.size() - 1; i >= 0; i--) {
-            String line = tooltip.get(i).toString();
+            String line = (String) tooltip.get(i);
             if (line.trim().isEmpty() || line.contains("Attack Damage")) {
                 tooltip.remove(i);
             }
         }
 
         tooltip.add("");
-        tooltip.add("\u00A79+0 Attack Damage");
+        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
     }
 }
