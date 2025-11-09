@@ -2,7 +2,7 @@ package com.github.hummel.dirtequipment.item;
 
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import cpw.mods.fml.relauncher.Side;
@@ -24,13 +24,8 @@ public class ItemDirtPickaxe extends ItemPickaxe {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
 
         tooltip.add("");
         tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
-
-        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
-            tooltip.remove(tooltip.size() - 1);
-        }
     }
 }
