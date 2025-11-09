@@ -32,6 +32,6 @@ public class ItemDirtPickaxe extends ItemPickaxe {
         }
 
         tooltip.add("");
-        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
+        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage" + EnumChatFormatting.RESET);
     }
 }
