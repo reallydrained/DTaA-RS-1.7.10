@@ -20,9 +20,19 @@ public class ItemDirtPickaxe extends ItemPickaxe {
         	setTextureName("dirtequipment:dirt_pickaxe");
 	}
 
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        tooltip.add("\u00A79+0 Attack Damage"); // blue +0 attack damage
+        for (int i = tooltip.size() - 1; i >= 0; i--) {
+            String line = tooltip.get(i).toString();
+            if (line.trim().isEmpty() || line.contains("Attack Damage")) {
+                tooltip.remove(i);
+            }
+        }
+
+        tooltip.add("");
+        tooltip.add("\u00A79+0 Attack Damage");
     }
 }
