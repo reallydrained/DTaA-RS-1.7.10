@@ -20,10 +20,10 @@ public class ItemDirtHoe extends ItemHoe {
         	setTextureName("dirtequipment:dirt_hoe");
 	}
 
- @Override
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        tooltip.add("");
         tooltip.add("\u00A79+0 Attack Damage");
-
     }
 }
