@@ -24,14 +24,13 @@ public class ItemDirtShovel extends ItemSpade {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        for (int i = tooltip.size() - 1; i >= 0; i--) {
-            String line = (String) tooltip.get(i);
-            if (line.trim().isEmpty() || line.contains("Attack Damage")) {
-                tooltip.remove(i);
-            }
-        }
+        super.addInformation(stack, player, tooltip, advanced);
 
         tooltip.add("");
-        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage" + EnumChatFormatting.RESET);
+        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
+
+        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
+            tooltip.remove(tooltip.size() - 1);
+        }
     }
 }
