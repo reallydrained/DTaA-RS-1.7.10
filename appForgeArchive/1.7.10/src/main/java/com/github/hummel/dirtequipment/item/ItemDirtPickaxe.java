@@ -20,11 +20,21 @@ public class ItemDirtPickaxe extends ItemPickaxe {
         	setTextureName("dirtequipment:dirt_pickaxe");
 	}
 
-    @Override
+  @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
-            tooltip.remove(tooltip.size() - 1);
+        while (!tooltip.isEmpty()) {
+            Object last = tooltip.get(tooltip.size() - 1);
+            if (last == null) {
+                tooltip.remove(tooltip.size() - 1);
+                continue;
+            }
+            String s = last.toString().replaceAll("§.", "").trim();
+            if (s.isEmpty()) {
+                tooltip.remove(tooltip.size() - 1);
+            } else {
+                break;
+            }
         }
 
         tooltip.add("");
