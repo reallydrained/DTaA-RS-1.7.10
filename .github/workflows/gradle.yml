@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
 jobs:
-    build-forge-archive-rfg:
+  build-forge-archive-rfg:
     runs-on: windows-latest
     strategy:
       matrix:
