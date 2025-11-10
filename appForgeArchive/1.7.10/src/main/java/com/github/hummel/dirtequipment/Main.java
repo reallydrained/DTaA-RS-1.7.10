@@ -2,8 +2,10 @@ package com.github.hummel.dirtequipment;
 
 import com.github.hummel.dirtequipment.init.Items;
 import com.github.hummel.dirtequipment.init.Recipes;
+import com.github.hummel.dirtequipment.init.TooltipCleaner;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = "dirtequipment", useMetadata = true)
 public class Main {
@@ -15,5 +17,7 @@ public class Main {
 	public void preInit(FMLPreInitializationEvent event) {
 		Items.preInit();
 		Recipes.preInit();
+
+		MinecraftForge.EVENT_BUS.register(new TooltipCleaner());
 	}
 }
