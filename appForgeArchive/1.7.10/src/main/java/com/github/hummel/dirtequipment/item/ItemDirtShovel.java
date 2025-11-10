@@ -22,11 +22,12 @@ public class ItemDirtShovel extends ItemSpade {
     }
 
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+@Override
+@SideOnly(Side.CLIENT)
+public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+    super.addInformation(stack, player, tooltip, advanced);
 
-        tooltip.add("");
-        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
-    }
+    tooltip.add("");
+
+    tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage" + EnumChatFormatting.RESET + "\u00A7r");
 }
