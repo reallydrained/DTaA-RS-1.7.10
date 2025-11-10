@@ -24,7 +24,13 @@ public class ItemDirtPickaxe extends ItemPickaxe {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+
         tooltip.add("");
-        tooltip.add("\u00A79+0 Attack Damage");
+        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage" + EnumChatFormatting.RESET + "\u00A7r");
+
+        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
+            tooltip.remove(tooltip.size() - 1);
+        }
     }
 }
