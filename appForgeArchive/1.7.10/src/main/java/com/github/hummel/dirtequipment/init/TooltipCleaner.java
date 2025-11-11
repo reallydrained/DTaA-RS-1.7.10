@@ -1,23 +1,30 @@
 package com.github.hummel.dirtequipment.init;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.List;
 
 public class TooltipCleaner {
 
     @SubscribeEvent
-    public void onRenderTooltip(RenderTooltipEvent.Pre event) {
-        List<String> lines = event.toolTip;
-        if (lines == null || lines.isEmpty()) return;
+    public void onTooltip(ItemTooltipEvent event) {
+        List tooltip = event.toolTip;
+        if (tooltip == null || tooltip.isEmpty()) return;
 
-        // Remove leading/trailing empty lines no matter what added them
-        while (!lines.isEmpty() && lines.get(0).trim().isEmpty()) {
-            lines.remove(0);
+        // Remove leading empty lines
+        while (!tooltip.isEmpty() && tooltip.get(0).toString().trim().isEmpty()) {
+            tooltip.remove(0);
         }
-        while (!lines.isEmpty() && lines.get(lines.size() - 1).trim().isEmpty()) {
-            lines.remove(lines.size() - 1);
+
+        // Remove trailing empty lines
+        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
+            tooltip.remove(tooltip.size() - 1);
+        }
+
+        // Re-run this pass just in case tooltip updates after item damage
+        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
+            tooltip.remove(tooltip.size() - 1);
         }
     }
 }
