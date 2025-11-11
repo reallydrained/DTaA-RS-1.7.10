@@ -18,6 +18,6 @@ public class Main {
 		Items.preInit();
 		Recipes.preInit();
 
-		MinecraftForge.EVENT_BUS.register(new TooltipRendererPatch());
+		MinecraftForge.EVENT_BUS.register(new TooltipCleaner());
 	}
 }
