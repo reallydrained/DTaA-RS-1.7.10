@@ -2,7 +2,6 @@ package com.github.hummel.dirtequipment.item;
 
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import cpw.mods.fml.relauncher.Side;
@@ -13,7 +12,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemSpade;
 
 public class ItemDirtShovel extends ItemSpade {
-
     public ItemDirtShovel() {
         super(Materials.DIRT_TOOL2);
         setCreativeTab(CreativeTabs.tabTools);
@@ -24,13 +22,7 @@ public class ItemDirtShovel extends ItemSpade {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-
         tooltip.add("");
-        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage" + EnumChatFormatting.RESET + "\u00A7r");
-
-        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
-            tooltip.remove(tooltip.size() - 1);
-        }
+        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
     }
 }
