@@ -1,5 +1,3 @@
-this look right? :
-
 package com.github.hummel.dirtequipment.init;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
