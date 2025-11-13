@@ -22,6 +22,7 @@ pluginManagement {
 		eachPlugin {
 			when (requested.id.id) {
 				"gg.essential.loom" -> useModule("gg.essential:architectury-loom:${requested.version}")
+				"com.gtnewhorizons.retrofuturagradle" -> useModule("com.gtnewhorizons:retrofuturagradle:1.4.9")
 			}
 		}
 	}
