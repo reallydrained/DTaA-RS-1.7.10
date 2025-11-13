@@ -9,15 +9,25 @@ public class TooltipCleaner {
 
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
-        List<String> tooltip = event.toolTip;
+        List tooltip = event.toolTip;
         if (tooltip == null || tooltip.isEmpty()) return;
 
-        // Remove leading/trailing empty lines no matter what
-        while (!tooltip.isEmpty() && tooltip.get(0).trim().isEmpty()) {
-            tooltip.remove(0);
-        }
-        while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).trim().isEmpty()) {
-            tooltip.remove(tooltip.size() - 1);
-        }
+        boolean removed;
+        do {
+            removed = false;
+
+            // Remove top empty lines
+            while (!tooltip.isEmpty() && tooltip.get(0).toString().trim().isEmpty()) {
+                tooltip.remove(0);
+                removed = true;
+            }
+
+            // Remove bottom empty lines
+            while (!tooltip.isEmpty() && tooltip.get(tooltip.size() - 1).toString().trim().isEmpty()) {
+                tooltip.remove(tooltip.size() - 1);
+                removed = true;
+            }
+
+        } while (removed);
     }
 }
