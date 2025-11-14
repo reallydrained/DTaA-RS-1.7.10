@@ -19,10 +19,4 @@ public class ItemDirtHoe extends ItemHoe {
         	setTextureName("dirtequipment:dirt_hoe");
 	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        tooltip.add("");
-        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
-    }
 }

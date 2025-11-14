@@ -19,10 +19,4 @@ public class ItemDirtPickaxe extends ItemPickaxe {
         setTextureName("dirtequipment:dirt_pickaxe");
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        tooltip.add("");
-        tooltip.add(EnumChatFormatting.BLUE + "+0 Attack Damage");
-    }
 }
