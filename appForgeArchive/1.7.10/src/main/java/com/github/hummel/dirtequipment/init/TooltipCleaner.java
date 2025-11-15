@@ -14,41 +14,53 @@ public class TooltipCleaner {
         List<String> original = event.toolTip;
         List<String> cleaned = new ArrayList<>();
 
+        String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
+
+        boolean isPickaxe = unloc.contains("pickaxe");
+        boolean isShovel  = unloc.contains("shovel");
+        boolean isHoe     = unloc.contains("hoe");
+        boolean isAxe     = unloc.contains("axe");
+        boolean isSword   = unloc.contains("sword");
+
+        // --- LEAVE SWORDS AND AXES ALONE ---
+        if (isSword || isAxe) {
+            return;
+        }
+
+        // --- CLEAN OUT VANILLA ATTACK DAMAGE LINES ---
         for (String line : original) {
             String raw = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
-
-            // Strip vanilla attack damage lines
             String lower = raw.toLowerCase();
-            if (lower.contains("attack damage")
-                || lower.contains("attackdamage")
-                || raw.contains("attribute.name.generic.attackDamage")) {
+
+            // Strip vanilla attribute lines
+            if (lower.contains("attack damage") ||
+                lower.contains("attackdamage") ||
+                raw.contains("attribute.name.generic.attackDamage")) {
                 continue;
             }
 
-            // Remove any stat lines generated previously
-            if (lower.contains("+0 attack damage")) continue;
+            // Remove old stat line if added previously
+            if (lower.contains("+0 attack damage")) {
+                continue;
+            }
 
             cleaned.add(line);
         }
 
-        // Identify dirt tools
-        String name = event.itemStack.getUnlocalizedName().toLowerCase();
-        boolean isShovel  = name.contains("shovel");
-        boolean isPickaxe = name.contains("pickaxe");
-        boolean isHoe     = name.contains("hoe");
+        // --- APPLY CUSTOM STATS ONLY TO PICK/SHOVEL/HOE ---
+        if (isPickaxe || isShovel || isHoe) {
 
-        if (isShovel || isPickaxe || isHoe) {
+            // Insert blank line after item name (index 1)
+            if (cleaned.size() > 1)
+                cleaned.add(1, "");
+            else
+                cleaned.add("");
 
-            // Insert blank line
-            int insertAt = Math.min(1, cleaned.size());
-            cleaned.add(insertAt, "");
-
-            // Insert stat line
-            int statAt = Math.min(insertAt + 1, cleaned.size());
-            cleaned.add(statAt, "\u00A79+0 Attack Damage");
+            // Insert colored stat line just after the blank line
+            cleaned.add(2, "\u00A79+0 Attack Damage");
         }
 
-        // Replace tooltip
+        // --- REPLACE TOOLTIP  ---
         event.toolTip.clear();
         event.toolTip.addAll(cleaned);
     }
