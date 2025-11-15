@@ -14,32 +14,42 @@ public class TooltipCleaner {
         List<String> original = event.toolTip;
         List<String> cleaned = new ArrayList<>();
 
+        // Only modify dirt tools
         String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
+        boolean isDirtItem = unloc.startsWith("item.dirtequipment:") 
+                             || unloc.contains("dirtequipment");
 
-        boolean isPickaxe = unloc.contains("pickaxe");
-        boolean isShovel  = unloc.contains("shovel");
-        boolean isHoe     = unloc.contains("hoe");
-        boolean isAxe     = unloc.contains("axe");
-        boolean isSword   = unloc.contains("sword");
+        if (!isDirtItem) {
+            // COMPLETELY ignore vanilla items
+            return;
+        }
 
-        // --- LEAVE SWORDS AND AXES ALONE ---
+        // Detect which dirt tool it is
+        boolean isPickaxe = unloc.contains("dirtpickaxe");
+        boolean isShovel  = unloc.contains("dirtshovel");
+        boolean isHoe     = unloc.contains("dirthoe");
+        boolean isAxe     = unloc.contains("dirtaxe");
+        boolean isSword   = unloc.contains("dirtsword");
+
+        // Dirt sword/axe should remain untouched
         if (isSword || isAxe) {
             return;
         }
 
-        // --- CLEAN OUT VANILLA ATTACK DAMAGE LINES ---
+        // Copy lines while removing vanilla attack dmg
         for (String line : original) {
-            String raw = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
-            String lower = raw.toLowerCase();
 
-            // Strip vanilla attribute lines
+            String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
+            String lower = stripped.toLowerCase();
+
+            // remove vanilla attack damage
             if (lower.contains("attack damage") ||
                 lower.contains("attackdamage") ||
-                raw.contains("attribute.name.generic.attackDamage")) {
+                stripped.contains("attribute.name.generic.attackDamage")) {
                 continue;
             }
 
-            // Remove old stat line if added previously
+            // Remove old custom line
             if (lower.contains("+0 attack damage")) {
                 continue;
             }
@@ -47,20 +57,25 @@ public class TooltipCleaner {
             cleaned.add(line);
         }
 
-        // --- APPLY CUSTOM STATS ONLY TO PICK/SHOVEL/HOE ---
+        // Add custom stat to dirt pick/shovel/hoe/axe
         if (isPickaxe || isShovel || isHoe) {
 
-            // Insert blank line after item name (index 1)
+            // Ensure at least 1 line exists
+            if (cleaned.isEmpty()) {
+                cleaned.add(event.itemStack.getDisplayName());
+            }
+
+            // Insert blank line after name (index 1)
             if (cleaned.size() > 1)
                 cleaned.add(1, "");
             else
                 cleaned.add("");
 
-            // Insert colored stat line just after the blank line
+            // Insert stat line after blank
             cleaned.add(2, "\u00A79+0 Attack Damage");
         }
 
-        // --- REPLACE TOOLTIP  ---
+        // Replace tooltip
         event.toolTip.clear();
         event.toolTip.addAll(cleaned);
     }
