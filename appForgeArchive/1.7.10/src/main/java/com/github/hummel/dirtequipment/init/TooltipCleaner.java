@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TooltipCleaner {
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
 
         List<String> original = event.toolTip;
@@ -16,6 +16,7 @@ public class TooltipCleaner {
 
         // Detect dirt tools
         String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
+        System.out.println("Tooltip event fired for: " + unloc);
 
         boolean isDirtPickaxe = unloc.contains("dirtpickaxe");
         boolean isDirtShovel  = unloc.contains("dirtshovel");
