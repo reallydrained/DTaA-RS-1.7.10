@@ -14,35 +14,57 @@ public class TooltipCleaner {
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
 
+        List<String> original = event.toolTip;
+        List<String> cleaned = new ArrayList<String>();
+
         String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
 
-        boolean isDirtPickaxe = unloc.contains("dirt_pickaxe");
-        boolean isDirtShovel  = unloc.contains("dirt_shovel");
-        boolean isDirtHoe     = unloc.contains("dirt_hoe");
+        boolean isPick = unloc.contains("dirt_pickaxe");
+        boolean isShovel = unloc.contains("dirt_shovel");
+        boolean isHoe = unloc.contains("dirt_hoe");
+        boolean isAxe = unloc.contains("dirt_axe");
+        boolean isSword = unloc.contains("dirt_sword");
 
-        // ONLY target the three tools
-        if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe)
+        if (!isPick && !isShovel && !isHoe && !isAxe && !isSword) {
             return;
+        }
 
-        // === EXPERIMENT: Build EXACT tooltip manually ===
-        List<String> finalTip = new ArrayList<>();
+        if (isAxe || isSword) {
+            return;
+        }
 
-        // line 0
-        finalTip.add(event.itemStack.getDisplayName());
+        String name = original.get(0);
+        cleaned.add(name);
 
-        // line 1 (blank)
-        finalTip.add("");
+        boolean durabilityFound = false;
+        String durabilityLine = null;
 
-        // line 2 (+0)
-        finalTip.add("\u00A79+0 Attack Damage");
+        for (int i = 1; i < original.size(); i++) {
+            String line = original.get(i);
+            String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim().toLowerCase();
 
-        // line 3 (durability IF ANY)
-        if (event.itemStack.isItemDamaged()) {
-            int dmg = event.itemStack.getMaxDamage() - event.itemStack.getItemDamage();
-            finalTip.add("\u00A77" + dmg + " Durability");
+            if (stripped.contains("attack damage")) {
+                continue;
+            }
+
+            if (stripped.startsWith("durability")) {
+                durabilityFound = true;
+                durabilityLine = line;
+                continue;
+            }
+
+            cleaned.add(line);
+        }
+
+        cleaned.add("");
+
+        cleaned.add("\u00A79+0 Attack Damage");
+
+        if (durabilityFound && durabilityLine != null) {
+            cleaned.add(durabilityLine);
         }
 
         event.toolTip.clear();
-        event.toolTip.addAll(finalTip);
+        event.toolTip.addAll(cleaned);
     }
 }
