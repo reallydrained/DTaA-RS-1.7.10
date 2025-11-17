@@ -10,7 +10,6 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class TooltipCleaner {
-
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
 
@@ -25,7 +24,11 @@ public class TooltipCleaner {
         boolean isDirtAxe     = unloc.contains("dirt_axe");
         boolean isDirtSword   = unloc.contains("dirt_sword");
 
-        if ((!isDirtPickaxe && !isDirtShovel && !isDirtHoe) || isDirtAxe || isDirtSword) {
+        if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe && !isDirtAxe && !isDirtSword) {
+            return;
+        }
+
+        if (isDirtSword || isDirtAxe) {
             return;
         }
 
@@ -40,17 +43,17 @@ public class TooltipCleaner {
             cleaned.add(line);
         }
 
-        if (cleaned.isEmpty()) {
-            cleaned.add(event.itemStack.getDisplayName());
-        }
+        if (isDirtPickaxe || isDirtShovel || isDirtHoe) {
 
-        if (cleaned.size() == 1) {
-            cleaned.add(1, "");
-        } else if (cleaned.size() > 1) {
-            cleaned.add(1, "");
-        }
+            int insertIndex = 1;
+            if (cleaned.size() > 1) {
+                insertIndex = 1;
+            }
 
-        cleaned.add(2, "\u00A79+0 Attack Damage");
+            cleaned.add(insertIndex, "");
+            cleaned.add(insertIndex + 1, "\u00A79+0 Attack Damage");
+
+        }
 
         event.toolTip.clear();
         event.toolTip.addAll(cleaned);
