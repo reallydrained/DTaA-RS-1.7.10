@@ -39,6 +39,12 @@ public class TooltipCleaner {
         boolean durabilityFound = false;
         String durabilityLine = null;
 
+        boolean hasBlankAfterName = false;
+        if (original.size() > 1) {
+            String line1 = original.get(1).replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
+            hasBlankAfterName = line1.isEmpty();
+        }
+
         for (int i = 1; i < original.size(); i++) {
             String line = original.get(i);
             String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim().toLowerCase();
@@ -56,7 +62,9 @@ public class TooltipCleaner {
             cleaned.add(line);
         }
 
-        cleaned.add("");
+        if (!hasBlankAfterName) {
+            cleaned.add("");
+        }
 
         cleaned.add("\u00A79+0 Attack Damage");
 
