@@ -12,56 +12,35 @@ import java.util.List;
 public class TooltipCleaner {
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
-        System.out.println("Tooltip event fired for: " + event.itemStack.getUnlocalizedName());
-
         List<String> original = event.toolTip;
         List<String> cleaned = new ArrayList<>();
 
-        // Detect dirt tools
         String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
-        System.out.println("Tooltip event fired for: " + unloc);
 
-        boolean isDirtPickaxe = unloc.contains("dirtpickaxe");
-        boolean isDirtShovel  = unloc.contains("dirtshovel");
-        boolean isDirtHoe     = unloc.contains("dirthoe");
-        boolean isDirtAxe     = unloc.contains("dirtaxe");
-        boolean isDirtSword   = unloc.contains("dirtsword");
+        boolean isPickaxe = unloc.contains("dirt_pickaxe");
+        boolean isShovel  = unloc.contains("dirt_shovel");
+        boolean isHoe     = unloc.contains("dirt_hoe");
+        boolean isAxe     = unloc.contains("dirt_axe");
+        boolean isSword   = unloc.contains("dirt_sword");
 
-        if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe && !isDirtAxe && !isDirtSword) {
-            return;
-        }
+        if (!isPickaxe && !isShovel && !isHoe && !isAxe && !isSword) return;
+        if (isSword || isAxe) return;
 
-        // Ignore dirt sword + dirt axe
-        if (isDirtSword || isDirtAxe) {
-            return;
-        }
-
-        // Remove any attack-damage tooltip
         for (String line : original) {
-
             String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
-            System.out.println("TOOLTIP LINE (raw): [" + stripped + "]"); // -- DEBUG CODE --
-            String lower = stripped.toLowerCase();
-
-            if (lower.matches(".*attack\\s*damage.*")) {
-                continue;
-            }
-
-            cleaned.add(line);
+            if (stripped.toLowerCase().matches(".*attack\\s*damage.*")) continue;
+            if (!stripped.isEmpty()) cleaned.add(line);
         }
 
-        // Add tooltip to dirt tools
-        if (isDirtPickaxe || isDirtShovel || isDirtHoe) {
-
-            if (cleaned.isEmpty()) {
-                cleaned.add(event.itemStack.getDisplayName());
-            }
-
-            if (cleaned.size() > 1)
-                cleaned.add(2, "\u00A79+0 Attack Damage");
-            else
-                cleaned.add("\u00A79+0 Attack Damage");
+        if (cleaned.isEmpty()) {
+            cleaned.add(event.itemStack.getDisplayName());
         }
+
+        if (cleaned.size() > 1) {
+            cleaned.add(1, "");
+        }
+
+        cleaned.add("\u00A79+0 Attack Damage");
 
         event.toolTip.clear();
         event.toolTip.addAll(cleaned);
