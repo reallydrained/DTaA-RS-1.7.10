@@ -10,37 +10,47 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class TooltipCleaner {
+
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
+
         List<String> original = event.toolTip;
         List<String> cleaned = new ArrayList<>();
 
         String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
 
-        boolean isPickaxe = unloc.contains("dirt_pickaxe");
-        boolean isShovel  = unloc.contains("dirt_shovel");
-        boolean isHoe     = unloc.contains("dirt_hoe");
-        boolean isAxe     = unloc.contains("dirt_axe");
-        boolean isSword   = unloc.contains("dirt_sword");
+        boolean isDirtPickaxe = unloc.contains("dirt_pickaxe");
+        boolean isDirtShovel  = unloc.contains("dirt_shovel");
+        boolean isDirtHoe     = unloc.contains("dirt_hoe");
+        boolean isDirtAxe     = unloc.contains("dirt_axe");
+        boolean isDirtSword   = unloc.contains("dirt_sword");
 
-        if (!isPickaxe && !isShovel && !isHoe && !isAxe && !isSword) return;
-        if (isSword || isAxe) return;
+        if ((!isDirtPickaxe && !isDirtShovel && !isDirtHoe) || isDirtAxe || isDirtSword) {
+            return;
+        }
 
         for (String line : original) {
             String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
-            if (stripped.toLowerCase().matches(".*attack\\s*damage.*")) continue;
-            if (!stripped.isEmpty()) cleaned.add(line);
+            String lower = stripped.toLowerCase();
+
+            if (lower.matches(".*attack\\s*damage.*")) {
+                continue;
+            }
+
+            cleaned.add(line);
         }
 
         if (cleaned.isEmpty()) {
             cleaned.add(event.itemStack.getDisplayName());
         }
 
-        if (cleaned.size() > 1) {
+        if (cleaned.size() == 1) {
+            cleaned.add(1, "");
+        } else if (cleaned.size() > 1) {
             cleaned.add(1, "");
         }
 
-        cleaned.add("\u00A79+0 Attack Damage");
+        cleaned.add(2, "\u00A79+0 Attack Damage");
 
         event.toolTip.clear();
         event.toolTip.addAll(cleaned);
