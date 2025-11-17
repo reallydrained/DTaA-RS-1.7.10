@@ -2,14 +2,17 @@ package com.github.hummel.dirtequipment.init;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class TooltipCleaner {
-
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
+        System.out.println("Tooltip event fired for: " + event.itemStack.getUnlocalizedName());
 
         List<String> original = event.toolTip;
         List<String> cleaned = new ArrayList<>();
@@ -55,11 +58,9 @@ public class TooltipCleaner {
             }
 
             if (cleaned.size() > 1)
-                cleaned.add(1, "");
+                cleaned.add(2, "\u00A79+0 Attack Damage");
             else
-                cleaned.add("");
-
-            cleaned.add(2, "\u00A79+0 Attack Damage");
+                cleaned.add("\u00A79+0 Attack Damage");
         }
 
         event.toolTip.clear();

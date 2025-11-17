@@ -19,6 +19,5 @@ public class Main {
 		Recipes.preInit();
 
 		MinecraftForge.EVENT_BUS.register(new TooltipCleaner());
-		FMLCommonHandler.instance().bus().register(new TooltipCleaner());
 	}
 }
