@@ -23,29 +23,22 @@ public class TooltipCleaner {
         boolean isDirtAxe     = unloc.contains("dirtaxe");
         boolean isDirtSword   = unloc.contains("dirtsword");
 
-        // Ignore vanilla tools
         if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe && !isDirtAxe && !isDirtSword) {
             return;
         }
 
-        // Ignore sword and axe
+        // Ignore dirt sword + dirt axe
         if (isDirtSword || isDirtAxe) {
             return;
         }
 
-        // Remove vanilla tooltips
+        // Remove any attack-damage tooltip
         for (String line : original) {
 
             String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
             String lower = stripped.toLowerCase();
 
-            if (lower.contains("attack damage") ||
-                lower.contains("attackdamage") ||
-                stripped.contains("attribute.name.generic.attackDamage")) {
-                continue;
-            }
-
-            if (lower.contains("+0 attack damage")) {
+            if (lower.matches(".*attack\\s*damage.*")) {
                 continue;
             }
 
