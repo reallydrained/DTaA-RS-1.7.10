@@ -36,6 +36,7 @@ public class TooltipCleaner {
         for (String line : original) {
 
             String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
+            System.out.println("TOOLTIP LINE (raw): [" + stripped + "]"); // -- DEBUG CODE --
             String lower = stripped.toLowerCase();
 
             if (lower.matches(".*attack\\s*damage.*")) {
