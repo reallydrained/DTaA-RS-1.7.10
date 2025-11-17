@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,14 @@ import java.util.List;
 public class TooltipCleaner {
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
+
+        // Remove all vanilla attribute modifiers
+        if (event.itemStack.hasTagCompound()) {
+            NBTTagCompound tag = event.itemStack.getTagCompound();
+            if (tag.hasKey("AttributeModifiers")) {
+                tag.removeTag("AttributeModifiers");
+            }
+        }
 
         List<String> original = event.toolTip;
         List<String> cleaned = new ArrayList<>();
@@ -24,36 +33,26 @@ public class TooltipCleaner {
         boolean isDirtAxe     = unloc.contains("dirt_axe");
         boolean isDirtSword   = unloc.contains("dirt_sword");
 
-        if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe && !isDirtAxe && !isDirtSword) {
+        if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe && !isDirtAxe && !isDirtSword)
             return;
-        }
 
-        if (isDirtSword || isDirtAxe) {
+        if (isDirtSword || isDirtAxe)
             return;
-        }
 
         for (String line : original) {
             String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
             String lower = stripped.toLowerCase();
-
-            if (lower.matches(".*attack\\s*damage.*")) {
-                continue;
+            if (!lower.matches(".*attack\\s*damage.*")) {
+                cleaned.add(line);
             }
-
-            cleaned.add(line);
         }
 
-        if (isDirtPickaxe || isDirtShovel || isDirtHoe) {
-
-            int insertIndex = 1;
-            if (cleaned.size() > 1) {
-                insertIndex = 1;
-            }
-
-            cleaned.add(insertIndex, "");
-            cleaned.add(insertIndex + 1, "\u00A79+0 Attack Damage");
-
+        if (cleaned.isEmpty()) {
+            cleaned.add(event.itemStack.getDisplayName());
         }
+
+        cleaned.add(1, "");
+        cleaned.add(2, "\u00A79+0 Attack Damage");
 
         event.toolTip.clear();
         event.toolTip.addAll(cleaned);
