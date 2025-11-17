@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TooltipCleaner {
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onTooltip(ItemTooltipEvent event) {
 
         List<String> original = event.toolTip;
