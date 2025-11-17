@@ -4,57 +4,45 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class TooltipCleaner {
+
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
-
-        // Remove all vanilla attribute modifiers
-        if (event.itemStack.hasTagCompound()) {
-            NBTTagCompound tag = event.itemStack.getTagCompound();
-            if (tag.hasKey("AttributeModifiers")) {
-                tag.removeTag("AttributeModifiers");
-            }
-        }
-
-        List<String> original = event.toolTip;
-        List<String> cleaned = new ArrayList<>();
 
         String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
 
         boolean isDirtPickaxe = unloc.contains("dirt_pickaxe");
         boolean isDirtShovel  = unloc.contains("dirt_shovel");
         boolean isDirtHoe     = unloc.contains("dirt_hoe");
-        boolean isDirtAxe     = unloc.contains("dirt_axe");
-        boolean isDirtSword   = unloc.contains("dirt_sword");
 
-        if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe && !isDirtAxe && !isDirtSword)
+        // ONLY target the three tools
+        if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe)
             return;
 
-        if (isDirtSword || isDirtAxe)
-            return;
+        // === EXPERIMENT: Build EXACT tooltip manually ===
+        List<String> finalTip = new ArrayList<>();
 
-        for (String line : original) {
-            String stripped = line.replaceAll("(?i)\u00A7[0-9A-FK-OR]", "").trim();
-            String lower = stripped.toLowerCase();
-            if (!lower.matches(".*attack\\s*damage.*")) {
-                cleaned.add(line);
-            }
+        // line 0
+        finalTip.add(event.itemStack.getDisplayName());
+
+        // line 1 (blank)
+        finalTip.add("");
+
+        // line 2 (+0)
+        finalTip.add("\u00A79+0 Attack Damage");
+
+        // line 3 (durability IF ANY)
+        if (event.itemStack.isItemDamaged()) {
+            int dmg = event.itemStack.getMaxDamage() - event.itemStack.getItemDamage();
+            finalTip.add("\u00A77" + dmg + " Durability");
         }
-
-        if (cleaned.isEmpty()) {
-            cleaned.add(event.itemStack.getDisplayName());
-        }
-
-        cleaned.add(1, "");
-        cleaned.add(2, "\u00A79+0 Attack Damage");
 
         event.toolTip.clear();
-        event.toolTip.addAll(cleaned);
+        event.toolTip.addAll(finalTip);
     }
 }
