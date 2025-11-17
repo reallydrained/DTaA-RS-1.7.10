@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class TooltipCleaner {
+public class JustTheTooltip {
 
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
