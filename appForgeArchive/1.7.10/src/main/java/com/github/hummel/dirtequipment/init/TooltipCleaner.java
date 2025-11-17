@@ -17,11 +17,11 @@ public class TooltipCleaner {
         // Detect dirt tools
         String unloc = event.itemStack.getUnlocalizedName().toLowerCase();
 
-        boolean isDirtPickaxe = unloc.contains("item.dirtpickaxe");
-        boolean isDirtShovel  = unloc.contains("item.dirtshovel");
-        boolean isDirtHoe     = unloc.contains("item.dirthoe");
-        boolean isDirtAxe     = unloc.contains("item.dirtaxe");
-        boolean isDirtSword   = unloc.contains("item.dirtsword");
+        boolean isDirtPickaxe = unloc.contains("dirtpickaxe");
+        boolean isDirtShovel  = unloc.contains("dirtshovel");
+        boolean isDirtHoe     = unloc.contains("dirthoe");
+        boolean isDirtAxe     = unloc.contains("dirtaxe");
+        boolean isDirtSword   = unloc.contains("dirtsword");
 
         // Ignore vanilla tools
         if (!isDirtPickaxe && !isDirtShovel && !isDirtHoe && !isDirtAxe && !isDirtSword) {
